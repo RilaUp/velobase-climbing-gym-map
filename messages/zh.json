@@ -134,11 +134,31 @@
   },
   "landing": {
     "hero": {
-      "titleLine1": "Build Your AI App",
-      "titleLine2": "In Record Time",
-      "subtitle": "A production-ready AI SaaS framework with auth, billing, payments, and AI chat built in.",
-      "subtitleAccent": "Focus on your core feature. We handle the rest."
-    }
+      "badge": "中国攀岩社区",
+      "title": "更快找到好岩馆、好线路、好搭子",
+      "subtitle": "面向中国攀岩者的岩馆地图，聚焦换线时间、线路质量评估、活动聚合和搭子匹配。",
+      "primaryCta": "进入攀岩地图",
+      "secondaryCta": "查看产品文档"
+    },
+    "sections": {
+      "capabilitiesTitle": "核心能力",
+      "monetizationTitle": "商业模式",
+      "pathTitle": "首条价值路径",
+      "pathSubtitle": "新用户可按城市筛选岩馆，查看换线与活动，再发布或响应搭子信息。",
+      "pathFlow": "城市筛选 -> 岩馆列表 -> 换线/活动信息 -> 评价与找搭子"
+    },
+    "capabilities": [
+      "基于地图 POI 的岩馆定位与基础信息展示",
+      "换线计划查询，帮助安排出行时段",
+      "用户提交线路难度、风格和质量评分",
+      "岩馆活动信息聚合与报名链接",
+      "附近岩友搭子发布与匹配"
+    ],
+    "monetization": [
+      "岩馆付费置顶与推广位",
+      "装备品牌广告投放与赞助合作",
+      "付费活动票务手续费分成"
+    ]
   },
   "dashboard": {
     "welcome": "欢迎回来",
@@ -329,6 +349,52 @@
     "resultSubStatus": "订阅状态：{status}",
     "resultHasCard": "已保存银行卡",
     "resultNoCard": "未保存银行卡"
+  },
+  "climbingMap": {
+    "filters": {
+      "city": "城市（例如：上海）",
+      "query": "岩馆名称或地址",
+      "search": "搜索"
+    },
+    "gyms": {
+      "title": "岩馆目录",
+      "subtitle": "基于地图 POI 的岩馆列表，附换线和活动快照",
+      "reviews": "{count} 条评价",
+      "partners": "{count} 条搭子帖",
+      "nextReset": "下次换线：{date}"
+    },
+    "partner": {
+      "title": "搭子广场",
+      "subtitle": "按城市寻找一起攀爬的岩友",
+      "city": "城市",
+      "anonymous": "匿名岩友",
+      "noGym": "未指定岩馆",
+      "contact": "联系方式：",
+      "postTitle": "发布找搭子",
+      "postSubtitle": "填写可约时间和偏好风格",
+      "availability": "时间段与攀爬偏好",
+      "contactHandle": "微信或社交账号",
+      "message": "补充说明（可选）",
+      "submit": "发布需求",
+      "submitting": "发布中..."
+    },
+    "review": {
+      "title": "线路质量评价",
+      "subtitle": "社区共建难度、风格和体验参考",
+      "selectedGym": "当前岩馆：{name}",
+      "selectGym": "请先在左侧选择一个岩馆",
+      "routeGrade": "线路难度（如 V4 / 5.11a）",
+      "styleTag": "线路风格（板面、仰角、动态）",
+      "qualityScore": "质量评分 1-5",
+      "comment": "评价内容",
+      "submit": "提交评价",
+      "submitting": "提交中..."
+    },
+    "state": {
+      "loading": "加载中...",
+      "emptyGyms": "当前筛选条件下暂无岩馆数据。",
+      "emptyPartners": "暂时还没有搭子帖。"
+    }
   },
   "account": {
     "profile": "Profile",

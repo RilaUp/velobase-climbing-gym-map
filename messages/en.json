@@ -134,11 +134,31 @@
   },
   "landing": {
     "hero": {
-      "titleLine1": "Build Your AI App",
-      "titleLine2": "In Record Time",
-      "subtitle": "A production-ready AI SaaS framework with auth, billing, payments, and AI chat built in.",
-      "subtitleAccent": "Focus on your core feature. We handle the rest."
-    }
+      "badge": "China Climbing Community",
+      "title": "Find Better Gyms, Better Routes, and Better Climbing Partners",
+      "subtitle": "A city-level climbing gym map focused on route reset timing, route quality reviews, activity discovery, and partner matching.",
+      "primaryCta": "Open Climbing Map",
+      "secondaryCta": "Read Product Docs"
+    },
+    "sections": {
+      "capabilitiesTitle": "Core Capabilities",
+      "monetizationTitle": "Business Model",
+      "pathTitle": "First Demo Path",
+      "pathSubtitle": "A first-time user can search a city, pick a gym, check reset/activity data, then post or join a partner request.",
+      "pathFlow": "City filter -> Gym list -> Route reset + activities -> Review + partner post"
+    },
+    "capabilities": [
+      "Gym location map powered by map-provider base POI data",
+      "Route reset schedule lookup for visit planning",
+      "User-submitted route quality scoring and comments",
+      "Gym activity aggregation and sign-up links",
+      "Partner matching posts for nearby climbers"
+    ],
+    "monetization": [
+      "Paid gym promotion slots in list and map views",
+      "Brand ad placements and sponsorship campaigns",
+      "Platform fee on paid activity ticket transactions"
+    ]
   },
   "dashboard": {
     "welcome": "Welcome back",
@@ -329,6 +349,52 @@
     "resultSubStatus": "Subscription status: {status}",
     "resultHasCard": "Saved card found",
     "resultNoCard": "No saved card"
+  },
+  "climbingMap": {
+    "filters": {
+      "city": "City (e.g. Shanghai)",
+      "query": "Gym name or address",
+      "search": "Search"
+    },
+    "gyms": {
+      "title": "Gym Directory",
+      "subtitle": "POI-based gyms with reset and activity snapshots",
+      "reviews": "{count} reviews",
+      "partners": "{count} partner posts",
+      "nextReset": "Next reset: {date}"
+    },
+    "partner": {
+      "title": "Partner Board",
+      "subtitle": "Find climbing buddies in your city",
+      "city": "City",
+      "anonymous": "Anonymous climber",
+      "noGym": "No specific gym",
+      "contact": "Contact:",
+      "postTitle": "Create Partner Post",
+      "postSubtitle": "Publish your availability and preferred style",
+      "availability": "Availability, time, and style",
+      "contactHandle": "WeChat or social handle",
+      "message": "Optional note",
+      "submit": "Post Request",
+      "submitting": "Posting..."
+    },
+    "review": {
+      "title": "Route Quality Review",
+      "subtitle": "Community feedback on grade, style, and quality",
+      "selectedGym": "Selected gym: {name}",
+      "selectGym": "Select a gym from the left list first",
+      "routeGrade": "Route grade (e.g. V4 / 5.11a)",
+      "styleTag": "Style (slab, overhang, dynamic)",
+      "qualityScore": "Quality score 1-5",
+      "comment": "Comment",
+      "submit": "Submit Review",
+      "submitting": "Submitting..."
+    },
+    "state": {
+      "loading": "Loading...",
+      "emptyGyms": "No gyms found for this filter yet.",
+      "emptyPartners": "No partner posts yet."
+    }
   },
   "account": {
     "profile": "Profile",

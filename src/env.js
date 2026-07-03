@@ -136,6 +136,8 @@ export const env = createEnv({
     TELEGRAM_WEBHOOK_SECRET: z.string().optional(),
     // Cloudflare Turnstile
     TURNSTILE_SECRET_KEY: z.string().optional(),
+    // AMap (Gaode) security
+    AMAP_SECURITY_JS_CODE: z.string().optional(),
     // Velobase Billing
     VELOBASE_API_KEY: z.string().optional(),
     // Velobase Gateway (OpenAI-compatible model routing)
@@ -189,6 +191,7 @@ export const env = createEnv({
     NEXT_PUBLIC_DISABLE_TEST_LOGIN: z.string().optional(),
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
+    NEXT_PUBLIC_AMAP_WEB_KEY: z.string().optional(),
     NEXT_PUBLIC_TELEGRAM_BOT_USERNAME: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_KEY: z.string().optional(),
     NEXT_PUBLIC_POSTHOG_HOST: z.string().url().optional(),
@@ -281,6 +284,7 @@ export const env = createEnv({
     TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN,
     TELEGRAM_WEBHOOK_SECRET: process.env.TELEGRAM_WEBHOOK_SECRET,
     TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
+    AMAP_SECURITY_JS_CODE: process.env.AMAP_SECURITY_JS_CODE,
     VELOBASE_API_KEY: process.env.VELOBASE_API_KEY,
     VELOBASE_GATEWAY_API_KEY: process.env.VELOBASE_GATEWAY_API_KEY,
     VELOBASE_GATEWAY_BASE_URL: process.env.VELOBASE_GATEWAY_BASE_URL,
@@ -313,6 +317,7 @@ export const env = createEnv({
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    NEXT_PUBLIC_AMAP_WEB_KEY: process.env.NEXT_PUBLIC_AMAP_WEB_KEY,
     NEXT_PUBLIC_TELEGRAM_BOT_USERNAME:
       process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME,
     NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,

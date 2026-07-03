@@ -35,6 +35,38 @@ enum BlockReason {
   ADMIN_MANUAL // 管理员手动封禁
 }
 
+enum ClimbingDataSourceProvider {
+  AMAP
+  MANUAL
+  OTHER
+}
+
+enum ClimbingActivityStatus {
+  DRAFT
+  PUBLISHED
+  CANCELED
+}
+
+enum ClimbingPartnerPostStatus {
+  OPEN
+  MATCHED
+  CLOSED
+  EXPIRED
+}
+
+enum ClimbingUserSubmissionType {
+  GYM_PROFILE
+  RESET_SCHEDULE
+  ACTIVITY
+  ROUTE_CONDITION
+}
+
+enum ClimbingPromotionStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+}
+
 enum AffiliateEarningSourceType {
   ORDER_PAYMENT
   SUBSCRIPTION_RENEWAL
@@ -248,6 +280,14 @@ model User {
   touchSchedules          TouchSchedule[]
   supportTickets          SupportTicket[]
   notificationPreferences UserNotificationPreference[]
+  climbingRouteReviews    ClimbingRouteReview[]
+  climbingPartnerPosts    ClimbingPartnerPost[]               @relation("ClimbingPartnerPostAuthor")
+  climbingPartnerMatches  ClimbingPartnerPost[]               @relation("ClimbingPartnerPostMatchedUser")
+  climbingGymSubmissions  ClimbingGymUserSubmission[]
+  climbingGymResets       ClimbingGymResetPlan[]
+  climbingGymActivities   ClimbingGymActivity[]
+  climbingGymPromotions   ClimbingGymPromotion[]
+  climbingTicketOrders    ClimbingActivityTicketOrder[]
 
   @@index([createdAt])
   @@index([deviceKeyAtSignup, createdAt])
@@ -1549,4 +1589,196 @@ model SupportSyncCursor {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("support_sync_cursors")
+}
+
+model ClimbingGym {
+  id               String                     @id @default(cuid())
+  name             String
+  city             String
+  district         String?
+  address          String
+  latitude         Float
+  longitude        Float
+  sourceProvider   ClimbingDataSourceProvider @default(MANUAL) @map("source_provider")
+  sourceExternalId String?                    @map("source_external_id")
+  description      String?
+  contact          String?
+  isVerified       Boolean                    @default(false) @map("is_verified")
+  createdAt        DateTime                   @default(now()) @map("created_at")
+  updatedAt        DateTime                   @updatedAt @map("updated_at")
+  resetPlans       ClimbingGymResetPlan[]
+  activities       ClimbingGymActivity[]
+  routeReviews     ClimbingRouteReview[]
+  partnerPosts     ClimbingPartnerPost[]
+  submissions      ClimbingGymUserSubmission[]
+  promotions       ClimbingGymPromotion[]
+
+  @@unique([sourceProvider, sourceExternalId])
+  @@index([city, district])
+  @@index([latitude, longitude])
+  @@index([createdAt])
+  @@map("climbing_gyms")
+}
+
+model ClimbingGymResetPlan {
+  id             String                     @id @default(cuid())
+  gymId          String                     @map("gym_id")
+  areaName       String                     @map("area_name")
+  resetDate      DateTime                   @map("reset_date")
+  notes          String?
+  sourceProvider ClimbingDataSourceProvider @default(MANUAL) @map("source_provider")
+  createdById    String?                    @map("created_by_id")
+  createdAt      DateTime                   @default(now()) @map("created_at")
+  updatedAt      DateTime                   @updatedAt @map("updated_at")
+  gym            ClimbingGym                @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  createdBy      User?                      @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([gymId, resetDate])
+  @@index([createdById])
+  @@map("climbing_gym_reset_plans")
+}
+
+model ClimbingGymActivity {
+  id               String                @id @default(cuid())
+  gymId            String                @map("gym_id")
+  title            String
+  description      String?
+  startAt          DateTime              @map("start_at")
+  endAt            DateTime?             @map("end_at")
+  signupUrl        String?               @map("signup_url")
+  isPaid           Boolean               @default(false) @map("is_paid")
+  ticketPriceCents Int?                  @map("ticket_price_cents")
+  capacity         Int?
+  status           ClimbingActivityStatus @default(PUBLISHED)
+  createdById      String?               @map("created_by_id")
+  createdAt        DateTime              @default(now()) @map("created_at")
+  updatedAt        DateTime              @updatedAt @map("updated_at")
+  gym              ClimbingGym           @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  createdBy        User?                 @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  ticketOrders     ClimbingActivityTicketOrder[]
+
+  @@index([gymId, startAt])
+  @@index([status, startAt])
+  @@index([createdById])
+  @@map("climbing_gym_activities")
+}
+
+model ClimbingRouteReview {
+  id           String    @id @default(cuid())
+  gymId        String    @map("gym_id")
+  userId       String    @map("user_id")
+  routeGrade   String    @map("route_grade")
+  styleTag     String    @map("style_tag")
+  qualityScore Int       @map("quality_score")
+  comment      String?
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  gym          ClimbingGym @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([gymId, createdAt])
+  @@index([userId, createdAt])
+  @@map("climbing_route_reviews")
+}
+
+model ClimbingPartnerPost {
+  id               String                    @id @default(cuid())
+  userId           String                    @map("user_id")
+  gymId            String?                   @map("gym_id")
+  city             String
+  preferredGrade   String?                   @map("preferred_grade")
+  climbingStyle    String?                   @map("climbing_style")
+  availableNote    String                    @map("available_note")
+  contactHandle    String                    @map("contact_handle")
+  message          String?
+  status           ClimbingPartnerPostStatus @default(OPEN)
+  matchedUserId    String?                   @map("matched_user_id")
+  expiresAt        DateTime?                 @map("expires_at")
+  createdAt        DateTime                  @default(now()) @map("created_at")
+  updatedAt        DateTime                  @updatedAt @map("updated_at")
+  gym              ClimbingGym?              @relation(fields: [gymId], references: [id], onDelete: SetNull)
+  user             User                      @relation("ClimbingPartnerPostAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  matchedUser      User?                     @relation("ClimbingPartnerPostMatchedUser", fields: [matchedUserId], references: [id], onDelete: SetNull)
+
+  @@index([city, status, createdAt])
+  @@index([gymId, status])
+  @@index([userId, status])
+  @@index([expiresAt])
+  @@map("climbing_partner_posts")
+}
+
+model ClimbingGymUserSubmission {
+  id           String                     @id @default(cuid())
+  gymId        String                     @map("gym_id")
+  userId       String                     @map("user_id")
+  type         ClimbingUserSubmissionType
+  content      Json
+  status       String                     @default("PENDING")
+  reviewedById String?                    @map("reviewed_by_id")
+  reviewedAt   DateTime?                  @map("reviewed_at")
+  createdAt    DateTime                   @default(now()) @map("created_at")
+  updatedAt    DateTime                   @updatedAt @map("updated_at")
+  gym          ClimbingGym                @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  user         User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([gymId, type, createdAt])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+  @@map("climbing_gym_user_submissions")
+}
+
+model ClimbingGymPromotion {
+  id             String                  @id @default(cuid())
+  gymId          String                  @map("gym_id")
+  slotType       String                  @default("TOP_LISTING") @map("slot_type")
+  campaignName   String                  @map("campaign_name")
+  budgetCents    Int?                    @map("budget_cents")
+  startsAt       DateTime                @map("starts_at")
+  endsAt         DateTime                @map("ends_at")
+  status         ClimbingPromotionStatus @default(DRAFT)
+  createdById    String?                 @map("created_by_id")
+  createdAt      DateTime                @default(now()) @map("created_at")
+  updatedAt      DateTime                @updatedAt @map("updated_at")
+  gym            ClimbingGym             @relation(fields: [gymId], references: [id], onDelete: Cascade)
+  createdBy      User?                   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([gymId, status, endsAt])
+  @@index([createdById])
+  @@map("climbing_gym_promotions")
+}
+
+model ClimbingBrandCampaign {
+  id             String    @id @default(cuid())
+  brandName      String    @map("brand_name")
+  campaignName   String    @map("campaign_name")
+  targetCities   String[]  @default([]) @map("target_cities")
+  placementType  String    @default("BANNER") @map("placement_type")
+  budgetCents    Int?      @map("budget_cents")
+  status         String    @default("DRAFT")
+  startsAt       DateTime? @map("starts_at")
+  endsAt         DateTime? @map("ends_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([status, startsAt])
+  @@map("climbing_brand_campaigns")
+}
+
+model ClimbingActivityTicketOrder {
+  id                String   @id @default(cuid())
+  activityId        String   @map("activity_id")
+  userId            String   @map("user_id")
+  amountCents       Int      @map("amount_cents")
+  platformFeeCents  Int      @default(0) @map("platform_fee_cents")
+  status            String   @default("PENDING")
+  externalOrderId   String?  @map("external_order_id")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+  activity          ClimbingGymActivity @relation(fields: [activityId], references: [id], onDelete: Cascade)
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([activityId, createdAt])
+  @@index([userId, createdAt])
+  @@index([status])
+  @@map("climbing_activity_ticket_orders")
 }
